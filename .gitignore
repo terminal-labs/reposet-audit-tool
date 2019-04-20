@@ -1,0 +1,16 @@
+.coverage
+logs
+keys.sh
+id_rsa
+id_rsa.pub
+
+package-lock.json
+__pycache__
+env
+node_modules
+.vagrant
+\#*\#
+*~
+*egg-info
+
+ubuntu-bionic-18.04-cloudimg-console.log
