@@ -13,4 +13,9 @@ node_modules
 *~
 *egg-info
 
+*.terraform
+*terraform.tfstate
+*terraform.tfstate.backup
+*terraform_*.zip
+
 ubuntu-bionic-18.04-cloudimg-console.log
