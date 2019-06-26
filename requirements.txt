@@ -1,4 +1,4 @@
-PyGithub["integrations"]
+PyGithub
 click
 requests
 pycontracts
