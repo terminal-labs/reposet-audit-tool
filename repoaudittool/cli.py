@@ -1,7 +1,8 @@
 import click
 import requests
 
-VERSION = "0.1"
+from settings import *
+
 
 @click.group()
 def cli():
