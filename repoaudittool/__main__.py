@@ -1,5 +1,6 @@
 from cli import main
-from app import initialize
+from app import system_check, initialize
 
+system_check()
 initialize()
 main()
