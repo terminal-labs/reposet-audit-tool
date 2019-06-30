@@ -1,5 +1,5 @@
 from cli import main
-from utils import initialize
+from app import initialize
 
 initialize()
 main()
