@@ -16,6 +16,6 @@ setup(
     install_requires=["PyGithub","coverage", "pycontracts", "pytest", "pytest-cov", "pytest-mock", "pytest-click", "pytest-pylint", "black", "flake8", "radon"],
     entry_points="""
         [console_scripts]
-        repoaudittool=repoaudittool.cli:main
+        repoaudittool=repoaudittool.__main__:main
     """,
 )

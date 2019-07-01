@@ -41,6 +41,3 @@ def selfcoverage_command():
 cli.add_command(scanrepos_group)
 cli.add_command(system_group)
 main = cli
-
-if __name__ == "__main__":
-    main()

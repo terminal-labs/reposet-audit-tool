@@ -4,7 +4,7 @@ import pickle
 import glob
 from uuid import UUID
 
-from settings import *
+from repoaudittool.settings import *
 
 
 def read_file(fname):
