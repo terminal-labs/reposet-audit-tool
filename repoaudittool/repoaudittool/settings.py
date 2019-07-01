@@ -7,4 +7,4 @@ DIRS = [TEMPDIR + "/repoauditworkingdirs", TEMPDIR + "/repoauditworkingdirs/repo
 MINIMUM_PYTHON_VERSION = (3,6,0)
 APPDIR = os.path.abspath(os.path.abspath(os.path.dirname(__file__)))
 SETUPFILEDIR = os.path.abspath(os.path.join(APPDIR, '..'))
-TESTDIR = os.path.abspath(os.path.join(SETUPFILEDIR, 'tests'))
+TESTDIR = os.path.abspath(os.path.join(SETUPFILEDIR, 'repoaudittooltests'))

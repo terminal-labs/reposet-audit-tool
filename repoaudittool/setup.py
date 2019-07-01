@@ -11,7 +11,7 @@ setup(
     author="Terminal Labs",
     author_email="solutions@terminallabs.com",
     license="see LICENSE file",
-    packages=["repoaudittool", "tests"],
+    packages=["repoaudittool", "repoaudittool.tests"],
     zip_safe=False,
     install_requires=["coverage",
         "pycontracts",
@@ -24,4 +24,8 @@ setup(
         "flake8",
         "radon",
     ],
+    entry_points='''
+        [console_scripts]
+        repoaudittool=repoaudittool.cli:main
+    '''
 )

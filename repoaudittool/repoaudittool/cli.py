@@ -3,7 +3,7 @@ import click
 import pytest
 import requests
 
-from settings import *
+from repoaudittool.settings import *
 
 
 @click.group()
@@ -35,7 +35,8 @@ def selftest_command():
 @system_group.command(name="selfcoverage")
 def selfcoverage_command():
     os.chdir(SETUPFILEDIR)
-    pytest.main(["--cov=repoaudittool","--cov-report", "term-missing", SETUPFILEDIR])
+    coveragerc_path = APPDIR + "/.coveragerc"
+    pytest.main(["--cov-config=" + coveragerc_path,"--cov=repoaudittool","--cov-report","term-missing", SETUPFILEDIR])
 
 
 cli.add_command(scanrepos_group)
