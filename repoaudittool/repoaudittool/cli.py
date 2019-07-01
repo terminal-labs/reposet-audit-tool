@@ -28,14 +28,14 @@ def version_command():
 
 @system_group.command(name="selftest")
 def selftest_command():
-    os.chdir(SETUPFILEDIR)
-    pytest.main(["-x", "-v", SETUPFILEDIR])
+    os.chdir(TESTDIR)
+    pytest.main(["-x", "-v", TESTDIR])
 
 
 @system_group.command(name="selfcoverage")
 def selfcoverage_command():
-    os.chdir(SETUPFILEDIR)
-    pytest.main(["--cov-config=" + COVERAGERC_PATH, "--cov=repoaudittool", "--cov-report", "term-missing", SETUPFILEDIR])
+    os.chdir(APPDIR)
+    pytest.main(["--cov-config=" + COVERAGERC_PATH, "--cov=repoaudittool", "--cov-report", "term-missing", APPDIR])
 
 
 cli.add_command(scanrepos_group)

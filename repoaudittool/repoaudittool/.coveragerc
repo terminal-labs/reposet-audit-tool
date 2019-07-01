@@ -1,2 +1,3 @@
 [run]
-omit = repoaudittool/tests/*
+disable_warnings = module-not-measured, no-data-collected
+omit = tests/*, coverage.py
