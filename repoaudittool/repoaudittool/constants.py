@@ -26,10 +26,12 @@ HOURS = [
     (23, "11pm"),
 ]
 
+
 def generate_hiw():
     HOURS_IN_WEEK = []
     for weekday in WEEKDAYS:
         for hour in HOURS:
             HOURS_IN_WEEK.append((weekday, hour[1]))
+
 
 HOURS_IN_WEEK = generate_hiw()
