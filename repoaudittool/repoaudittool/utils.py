@@ -24,7 +24,7 @@ def create_dir(directroy):
 
 
 def empty_dir(path):
-    files = glob.glob(path + "/*")
+    files = glob.glob(f"{path}/*")
     for f in files:
         if os.path.isfile(f):
             os.remove(f)
@@ -61,7 +61,7 @@ def ping(host):
 
     ping_param = "-c 1"
 
-    resultado = os.popen("ping " + ping_param + " " + host).read()
+    resultado = os.popen(f"ping {ping_param} {host}").read()
 
     if "ttl=" in resultado:
         res = True

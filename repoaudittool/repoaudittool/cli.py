@@ -35,7 +35,7 @@ def selftest_command():
 @system_group.command(name="selfcoverage")
 def selfcoverage_command():
     os.chdir(APPDIR)
-    pytest.main(["--cov-config=" + COVERAGERC_PATH, "--cov=repoaudittool", "--cov-report", "term-missing", APPDIR])
+    pytest.main([f"--cov-config={COVERAGERC_PATH}", "--cov=repoaudittool", "--cov-report", "term-missing", APPDIR])
 
 
 cli.add_command(scanrepos_group)
