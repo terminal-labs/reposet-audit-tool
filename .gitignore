@@ -8,11 +8,25 @@ package-lock.json
 __pycache__
 env
 node_modules
-.vagrant
 extra
+.vagrant
 \#*\#
 *~
 *egg-info
+*.pyc
+*.pex
+
+maintenance
+run
+tmp
+*keys.sh
+.Trash*
+*.zip
+*nodes
+*nohup.out
+*workingdirs
+*secrets
+*dist
 
 *.terraform
 *terraform.tfstate

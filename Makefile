@@ -23,6 +23,9 @@ vagrant-conda: download_python_environment_manager
 
 mac-pyenv: download_python_environment_manager
 	@sudo bash maintenance/general/pyenv/build.sh $(APPNAME) $(SUDO_USER) mac
-	
+
 mac-conda: download_python_environment_manager
 	@sudo bash maintenance/general/conda/build.sh $(APPNAME) $(SUDO_USER) mac
+
+linux-pyenv: download_python_environment_manager
+	@sudo bash maintenance/general/pyenv/build.sh $(APPNAME) $(SUDO_USER) linux
