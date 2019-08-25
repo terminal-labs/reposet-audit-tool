@@ -20,3 +20,10 @@ def initialize():
 
 def clone_repo(repo):
     pass
+
+
+def load_manifest_dir(dirpath):
+    manifest_dict = {}
+    if os.path.isdir(dirpath): 
+        files = os.listdir(dirpath)
+        return files

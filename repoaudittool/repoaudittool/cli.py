@@ -4,6 +4,7 @@ import pytest
 import requests
 
 from repoaudittool.settings import *
+from repoaudittool.app import load_manifest_dir
 
 
 @click.group()
@@ -19,6 +20,12 @@ def scanrepos_group():
 @click.group(name="system")
 def system_group():
     return None
+
+
+@scanrepos_group.command(name="scan")
+@click.argument('dirpath')
+def scanrepos(dirpath):
+    print(load_manifest_dir(dirpath))
 
 
 @system_group.command(name="version")
