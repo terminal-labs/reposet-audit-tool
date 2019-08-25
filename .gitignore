@@ -19,6 +19,7 @@ extra
 maintenance
 run
 tmp
+activate.sh
 *keys.sh
 .Trash*
 *.zip
