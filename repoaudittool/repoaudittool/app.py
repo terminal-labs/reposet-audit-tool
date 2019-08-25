@@ -3,6 +3,9 @@ import sys
 import binascii
 import pickle
 import glob
+import yaml
+
+from bash import bash
 
 from repoaudittool.utils import create_dir
 from repoaudittool.constants import HOURS_IN_WEEK
@@ -23,10 +26,16 @@ def initialize():
         create_dir(dir)
 
 
+def audit_repo(manifest_dict):
+    my_dict = yaml.load(open(dirpath + "/utilities-package.yaml"))
+    print(my_dict)
+
+
 def clone_repo(manifest_dict):
     dir_create("/tmp/rat")
     for file in manifest_dict['reponames']:
         dir_create("/tmp/rat/" + file)
+        bash(f"cd /tmp/rat/{file}; git clone git@github.com:terminal-labs/{file}.git")
     print(manifest_dict)
 
 
