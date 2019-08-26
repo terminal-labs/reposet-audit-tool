@@ -8,7 +8,6 @@ import hashlib
 
 from bash import bash
 
-from repoaudittool.utils import create_dir
 from repoaudittool.constants import HOURS_IN_WEEK
 from repoaudittool.settings import *
 
@@ -24,7 +23,7 @@ def system_check():
 
 def initialize():
     for dir in DIRS:
-        create_dir(dir)
+        dir_create(dir)
 
 
 def clone_repo(manifest_dict):
