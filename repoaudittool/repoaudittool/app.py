@@ -4,6 +4,7 @@ import binascii
 import pickle
 import glob
 import yaml
+import hashlib
 
 from bash import bash
 
@@ -40,8 +41,23 @@ def load_yaml_files(dirpath, repospecs):
     return specs
 
 
+def hash_file(filepath):
+    f = open(filepath)
+    data = f.read()
+    f.close()
+    h = hashlib.sha256()
+    h.update(data.encode('utf-8'))
+    hash = h.hexdigest()
+    return hash
+
+
 def scan_for_requiredfiles(reponame, requiredfiles):
-    print(reponame, requiredfiles)
+    for file in requiredfiles:
+        filepath = "/tmp/rat/" + reponame + "/" + reponame + "/" + file['name']
+        if os.path.exists(filepath):
+            hash = hash_file(filepath)
+            assert hash == file['hash']
+            print("file ", filepath.replace("/tmp/rat/" + reponame,""), " looks good")
 
 
 def audit_repos(manifest_dict):
