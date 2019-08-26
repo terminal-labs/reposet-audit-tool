@@ -4,7 +4,7 @@ import pytest
 import requests
 
 from repoaudittool.settings import *
-from repoaudittool.app import load_manifest_dir, clone_repo, audit_repo
+from repoaudittool.app import load_manifest_dir, clone_repo, audit_repos
 
 
 @click.group()
@@ -27,7 +27,7 @@ def system_group():
 def scanrepos(dirpath):
     manifest_dict = load_manifest_dir(dirpath)
     clone_repo(manifest_dict)
-    audit_repo(manifest_dict)
+    audit_repos(manifest_dict)
 
 
 @system_group.command(name="version")

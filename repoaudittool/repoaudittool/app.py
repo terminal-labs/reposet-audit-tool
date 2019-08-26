@@ -26,18 +26,28 @@ def initialize():
         create_dir(dir)
 
 
-def audit_repo(manifest_dict):
-    my_dict = yaml.load(open(dirpath + "/utilities-package.yaml"))
-    print(my_dict)
-
-
 def clone_repo(manifest_dict):
     dir_create("/tmp/rat")
     for file in manifest_dict['reponames']:
         dir_create("/tmp/rat/" + file)
         bash(f"cd /tmp/rat/{file}; git clone git@github.com:terminal-labs/{file}.git")
-    print(manifest_dict)
 
+
+def load_yaml_files(dirpath, repospecs):
+    specs = []
+    for repospec in repospecs:
+        specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.FullLoader))
+    return specs
+
+
+def scan_for_requiredfiles(reponame, requiredfiles):
+    print(reponame, requiredfiles)
+
+
+def audit_repos(manifest_dict):
+    for repo in manifest_dict["reponames"]:
+        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles'])
+    
 
 def load_manifest_dir(dirpath):
     manifest_dict = {}
@@ -46,6 +56,24 @@ def load_manifest_dir(dirpath):
         if "repos.txt" in files:
             f = open(dirpath + "/repos.txt", "r")
             lines = f.readlines()
-            lines = [line.strip() for line in lines]
-            manifest_dict["reponames"] = lines
+            names = [line.split(' ')[0] for line in lines]
+            names = [name.strip() for name in names]
+            manifest_dict["reponames"] = names
+            repospecs = [line.split(' ')[1] for line in lines]
+            repospecs = [repospec.strip() for repospec in repospecs]
+            
+            manifest_dict["repospecsmap"] = {}
+            i = 0
+            while i < len(lines):
+                manifest_dict["repospecsmap"][names[i]] = repospecs[i]
+                i = i + 1
+                
+            manifest_dict["specs"] = {}
+            specs = load_yaml_files(dirpath, repospecs)
+            i = 0
+            while i < len(lines):
+                manifest_dict["specs"][names[i]] = specs[i]
+                i = i + 1
+            
+            
         return manifest_dict
