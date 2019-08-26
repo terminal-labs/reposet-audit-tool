@@ -47,11 +47,11 @@ def scan_for_requiredfiles(reponame, requiredfiles):
 def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
         scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles'])
-    
+
 
 def load_manifest_dir(dirpath):
     manifest_dict = {}
-    if os.path.isdir(dirpath): 
+    if os.path.isdir(dirpath):
         files = os.listdir(dirpath)
         if "repos.txt" in files:
             f = open(dirpath + "/repos.txt", "r")
@@ -61,19 +61,19 @@ def load_manifest_dir(dirpath):
             manifest_dict["reponames"] = names
             repospecs = [line.split(' ')[1] for line in lines]
             repospecs = [repospec.strip() for repospec in repospecs]
-            
+
             manifest_dict["repospecsmap"] = {}
             i = 0
             while i < len(lines):
                 manifest_dict["repospecsmap"][names[i]] = repospecs[i]
                 i = i + 1
-                
+
             manifest_dict["specs"] = {}
             specs = load_yaml_files(dirpath, repospecs)
             i = 0
             while i < len(lines):
                 manifest_dict["specs"][names[i]] = specs[i]
                 i = i + 1
-            
-            
+
+
         return manifest_dict
