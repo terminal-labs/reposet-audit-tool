@@ -19,16 +19,16 @@ jobs:
       - run:
           name: Install deps
           command: |
-            cd /vagrant; sudo bash maintenance/general/pyenv/install_apt_dependencies.sh repoaudittool vagrant vagrant
+            cd /vagrant; sudo bash maintenance/general/conda/install_apt_dependencies.sh repoaudittool vagrant vagrant
       - run:
           name: Install python
           command: |
-            cd /vagrant; sudo bash maintenance/general/pyenv/install_python.sh repoaudittool vagrant vagrant
+            cd /vagrant; sudo bash maintenance/general/conda/install_python.sh repoaudittool vagrant vagrant
       - run:
           name: Install app
           command: |
-            cd /vagrant; sudo bash maintenance/general/pyenv/install_app.sh repoaudittool vagrant vagrant
+            cd /vagrant; sudo bash maintenance/general/conda/install_app.sh repoaudittool vagrant vagrant
       - run:
           name: Run tests
           command: |
-            cd /vagrant; sudo bash maintenance/general/pyenv/run_tests.sh repoaudittool vagrant vagrant
+            cd /vagrant; sudo bash maintenance/general/conda/run_tests.sh repoaudittool vagrant vagrant
