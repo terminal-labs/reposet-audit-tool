@@ -11,6 +11,7 @@ from bash import bash
 from repoaudittool.constants import HOURS_IN_WEEK
 from repoaudittool.settings import *
 
+clone_cmd = "git clone git@github.com:terminal-labs"
 
 def dir_create(path):
     if not os.path.exists(path):
@@ -30,7 +31,7 @@ def clone_repo(manifest_dict):
     dir_create("/tmp/rat")
     for file in manifest_dict['reponames']:
         dir_create("/tmp/rat/" + file)
-        bash(f"cd /tmp/rat/{file}; git clone git@github.com:terminal-labs/{file}.git")
+        bash(f"cd /tmp/rat/{file}; {clone_cmd}/{file}.git")
 
 
 def load_yaml_files(dirpath, repospecs):
