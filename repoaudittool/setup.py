@@ -16,7 +16,20 @@ setup(
     packages=["repoaudittool", "repoaudittool.tests"],
     zip_safe=False,
     include_package_data=True,
-    install_requires=["pyyaml","utilities-package","PyGithub","coverage","pycontracts", "pytest", "pytest-cov", "pytest-mock", "pytest-click", "pytest-pylint", "black", "flake8", "radon"],
+    install_requires=[
+                      "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git@master#egg=utilitiespackage&subdirectory=utilitiespackage",
+                      "pyyaml",
+                      "PyGithub",
+                      "coverage",
+                      "pycontracts", 
+                      "pytest", 
+                      "pytest-cov", 
+                      "pytest-mock", 
+                      "pytest-click", 
+                      "pytest-pylint", 
+                      "black", 
+                      "flake8", 
+                      "radon"],
     entry_points="""
         [console_scripts]
         repoaudittool=repoaudittool.__main__:main
