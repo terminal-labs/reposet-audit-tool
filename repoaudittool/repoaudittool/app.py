@@ -11,20 +11,32 @@ from bash import bash
 from repoaudittool.constants import HOURS_IN_WEEK
 from repoaudittool.settings import *
 
-clone_cmd = "git clone git@github.com:terminal-labs"
+
+#clone_cmd = "git clone git@github.com:terminal-labs"
+clone_cmd = "git clone git@gitlab.com:terminallabs/utilitiespackage"
 
 def dir_create(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
 
-def system_check():
-    assert sys.version_info >= MINIMUM_PYTHON_VERSION
+def hash_file(filepath):
+    f = open(filepath)
+    data = f.read()
+    f.close()
+    h = hashlib.sha256()
+    h.update(data.encode('utf-8'))
+    hash = h.hexdigest()
+    return hash
 
 
 def initialize():
     for dir in DIRS:
         dir_create(dir)
+
+
+def system_check():
+    assert sys.version_info >= MINIMUM_PYTHON_VERSION
 
 
 def clone_repo(manifest_dict):
@@ -39,30 +51,6 @@ def load_yaml_files(dirpath, repospecs):
     for repospec in repospecs:
         specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.FullLoader))
     return specs
-
-
-def hash_file(filepath):
-    f = open(filepath)
-    data = f.read()
-    f.close()
-    h = hashlib.sha256()
-    h.update(data.encode('utf-8'))
-    hash = h.hexdigest()
-    return hash
-
-
-def scan_for_requiredfiles(reponame, requiredfiles):
-    for file in requiredfiles:
-        filepath = "/tmp/rat/" + reponame + "/" + reponame + "/" + file['name']
-        if os.path.exists(filepath):
-            hash = hash_file(filepath)
-            assert hash == file['hash']
-            print("file ", filepath.replace("/tmp/rat/" + reponame,""), " looks good")
-
-
-def audit_repos(manifest_dict):
-    for repo in manifest_dict["reponames"]:
-        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles'])
 
 
 def load_manifest_dir(dirpath):
@@ -93,3 +81,26 @@ def load_manifest_dir(dirpath):
 
 
         return manifest_dict
+
+
+def audit_repos(manifest_dict):
+    for repo in manifest_dict["reponames"]:
+        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles'])
+
+
+def scan_for_requireddirs(reponame, requiredfiles):
+    pass
+
+
+def scan_for_requiredfiles(reponame, requiredfiles):
+    for file in requiredfiles:
+        filepath = "/tmp/rat/" + reponame + "/" + reponame + "/" + file['name']
+        if os.path.exists(filepath):
+            hash = hash_file(filepath)
+            assert hash == file['hash']
+            print("file ", filepath.replace("/tmp/rat/" + reponame,""), " looks good")
+
+#similarfiles
+#forbiddenfiles
+#requiredbranches
+#namedpattern
