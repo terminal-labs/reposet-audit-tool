@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/terminal-labs/reposet-management-tool.svg?style=svg)](https://circleci.com/gh/terminal-labs/reposet-management-tool)
-
 ## License
 
 MIT (See LICENSE file).
