@@ -3,11 +3,11 @@ import sys
 import binascii
 import pickle
 import glob
-import yaml
 import hashlib
 from pathlib import Path
 from shutil import copyfile, move, rmtree
 
+import yaml
 from bash import bash
 
 from repoaudittool.constants import HOURS_IN_WEEK
@@ -52,7 +52,7 @@ def clone_repo(manifest_dict):
 def load_yaml_files(dirpath, repospecs):
     specs = []
     for repospec in repospecs:
-        specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.FullLoader))
+        specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.Loader))
     return specs
 
 
