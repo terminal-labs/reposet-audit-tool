@@ -85,7 +85,7 @@ def load_manifest_dir(dirpath):
 
 def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
-        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles'])
+        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_detailed'])
 
 
 def scan_for_requireddirs(reponame, requiredfiles):
@@ -100,7 +100,14 @@ def scan_for_requiredfiles(reponame, requiredfiles):
             assert hash == file['hash']
             print("file ", filepath.replace("/tmp/rat/" + reponame,""), " looks good")
 
-#similarfiles
-#forbiddenfiles
-#requiredbranches
-#namedpattern
+#repometadata
+#requiredfiles_detailed
+#requiredfiles_list
+#similarfiles_detailed
+#similarfiles_list
+#requireddirs_detailed
+#requireddirs_list
+#forbiddenfiles_detailed
+#forbiddenfiles_list
+#requiredbranches_detailed
+#requiredbranches_list
