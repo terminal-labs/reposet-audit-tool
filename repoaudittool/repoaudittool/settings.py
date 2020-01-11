@@ -1,6 +1,6 @@
 from repoaudittool.derived_settings import APPDIR, SETUPFILEDIR, TESTDIR, MEMTEMPDIR
 
-VERSION = "0.0.3"
+VERSION = "0.0.4"
 PRINT_VERBOSITY = "high"
 EXCLUDED_DIRS = [".DS_Store"]
 PROJECT_NAME = "repoaudittool"

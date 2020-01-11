@@ -10,9 +10,9 @@ from shutil import copyfile, move, rmtree
 import yaml
 from bash import bash
 
-from repoaudittool.constants import HOURS_IN_WEEK
 from repoaudittool.settings import *
 
+tempdir = "/tmp/rat/"
 
 def dir_create(path):
     if not os.path.exists(path):
@@ -43,10 +43,10 @@ def system_check():
 
 
 def clone_repo(manifest_dict):
-    dir_create("/tmp/rat")
+    dir_create(tempdir)
     for file in manifest_dict['reponames']:
-        dir_create("/tmp/rat/" + file)
-        bash(f"cd /tmp/rat/{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
+        dir_create(tempdir + file)
+        bash(f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
 
 
 def load_yaml_files(dirpath, repospecs):
@@ -88,29 +88,53 @@ def load_manifest_dir(dirpath):
 
 def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
-        scan_for_requiredfiles(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_detailed'])
+        scan_for_requiredfiles_detailed(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_detailed'])
 
 
-def scan_for_requireddirs(reponame, requiredfiles):
+def scan_for_repometadata():
     pass
 
 
-def scan_for_requiredfiles(reponame, requiredfiles):
+def scan_for_requiredfiles_detailed(reponame, requiredfiles):
     for file in requiredfiles:
-        filepath = "/tmp/rat/" + reponame + "/" + reponame + "/" + file['name']
+        filepath = tempdir + reponame + "/" + reponame + "/" + file['name']
         if os.path.exists(filepath):
             hash = hash_file(filepath)
             assert hash == file['hash']
-            print("file ", filepath.replace("/tmp/rat/" + reponame,""), " looks good")
+            print("file ", filepath.replace(tempdir + reponame,""), " looks good")
 
-#repometadata
-#requiredfiles_detailed
-#requiredfiles_list
-#similarfiles_detailed
-#similarfiles_list
-#requireddirs_detailed
-#requireddirs_list
-#forbiddenfiles_detailed
-#forbiddenfiles_list
-#requiredbranches_detailed
-#requiredbranches_list
+
+def scan_for_requiredfiles_list(reponame, requiredfiles):
+    pass
+
+
+def scan_for_similarfiles_detailed(reponame, requiredfiles):
+    pass
+
+
+def scan_for_similarfiles_list(reponame, requiredfiles):
+    pass
+
+
+def scan_for_requireddirs_detailed(reponame, requiredfiles):
+    pass
+
+
+def scan_for_requireddirs_list(reponame, requiredfiles):
+    pass
+
+
+def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
+    pass
+
+
+def scan_for_forbiddenfiles_list(reponame, requiredfiles):
+    pass
+
+
+def scan_for_requiredbranches_detailed(reponame, requiredfiles):
+    pass
+
+
+def scan_for_requiredbranches_list(reponame, requiredfiles):
+    pass
