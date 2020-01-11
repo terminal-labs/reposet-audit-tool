@@ -90,7 +90,9 @@ def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
         scan_for_requiredfiles_detailed(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_detailed'])
         scan_for_requiredfiles_list(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_list'])
-
+        scan_for_forbiddenfiles_list(repo, manifest_dict["specs"][repo]['spec']['forbiddenfiles_list'])
+        scan_for_requireddirs_list(repo, manifest_dict["specs"][repo]['spec']['requireddirs_list'])
+        scan_for_requiredbranches_list(repo, manifest_dict["specs"][repo]['spec']['requiredbranches_list'])
 
 def scan_for_repometadata():
     pass
@@ -102,14 +104,14 @@ def scan_for_requiredfiles_detailed(reponame, requiredfiles):
         if os.path.exists(filepath):
             hash = hash_file(filepath)
             assert hash == file['hash']
-            print("file ", filepath.replace(tempdir + reponame,""), " looks good")
+            print("file ", filepath.replace(tempdir + reponame,""), " looks good -- pass")
 
 
 def scan_for_requiredfiles_list(reponame, requiredfiles):
     for file in requiredfiles:
         filepath = tempdir + reponame + "/" + reponame + "/" + file
         if os.path.exists(filepath):
-            print("file ", filepath.replace(tempdir + reponame,""), " exists")
+            print("file ", filepath.replace(tempdir + reponame,""), " exists -- pass")
 
 
 def scan_for_similarfiles_detailed(reponame, requiredfiles):
@@ -125,7 +127,10 @@ def scan_for_requireddirs_detailed(reponame, requiredfiles):
 
 
 def scan_for_requireddirs_list(reponame, requiredfiles):
-    pass
+    for dir in requiredfiles:
+        dirpath = tempdir + reponame + "/" + reponame + "/" + dir
+        if os.path.exists(dirpath) and os.path.isdir(dirpath):
+            print("dir ", dirpath.replace(tempdir + reponame,""), " exists -- pass")
 
 
 def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
@@ -133,12 +138,20 @@ def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
 
 
 def scan_for_forbiddenfiles_list(reponame, requiredfiles):
-    pass
+    for file in requiredfiles:
+        filepath = tempdir + reponame + "/" + reponame + "/" + file
+        if not os.path.exists(filepath):
+            print("file ", filepath.replace(tempdir + reponame,""), " does not exists -- pass")
 
 
 def scan_for_requiredbranches_detailed(reponame, requiredfiles):
     pass
 
 
-def scan_for_requiredbranches_list(reponame, requiredfiles):
-    pass
+def scan_for_requiredbranches_list(reponame, requiredbranches):
+    for branch in requiredbranches:
+        branches = str(bash(f"cd {tempdir}{reponame}/{reponame}; git branch -a"))
+        if branch in branches:
+            print("branch ", branch, " does exists -- pass")
+        else:
+            print("branch ", branch, " does not exists -- fail")
