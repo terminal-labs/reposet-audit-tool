@@ -89,6 +89,7 @@ def load_manifest_dir(dirpath):
 def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
         scan_for_requiredfiles_detailed(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_detailed'])
+        scan_for_requiredfiles_list(repo, manifest_dict["specs"][repo]['spec']['requiredfiles_list'])
 
 
 def scan_for_repometadata():
@@ -105,7 +106,10 @@ def scan_for_requiredfiles_detailed(reponame, requiredfiles):
 
 
 def scan_for_requiredfiles_list(reponame, requiredfiles):
-    pass
+    for file in requiredfiles:
+        filepath = tempdir + reponame + "/" + reponame + "/" + file
+        if os.path.exists(filepath):
+            print("file ", filepath.replace(tempdir + reponame,""), " exists")
 
 
 def scan_for_similarfiles_detailed(reponame, requiredfiles):
