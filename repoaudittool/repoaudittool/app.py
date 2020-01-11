@@ -5,6 +5,8 @@ import pickle
 import glob
 import yaml
 import hashlib
+from pathlib import Path
+from shutil import copyfile, move, rmtree
 
 from bash import bash
 
@@ -12,12 +14,13 @@ from repoaudittool.constants import HOURS_IN_WEEK
 from repoaudittool.settings import *
 
 
-#clone_cmd = "git clone git@github.com:terminal-labs"
-clone_cmd = "git clone git@gitlab.com:terminallabs/utilitiespackage"
-
 def dir_create(path):
     if not os.path.exists(path):
         os.makedirs(path)
+
+
+def dir_delete(path):
+    rmtree(path)
 
 
 def hash_file(filepath):
@@ -43,7 +46,7 @@ def clone_repo(manifest_dict):
     dir_create("/tmp/rat")
     for file in manifest_dict['reponames']:
         dir_create("/tmp/rat/" + file)
-        bash(f"cd /tmp/rat/{file}; {clone_cmd}/{file}.git")
+        bash(f"cd /tmp/rat/{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
 
 
 def load_yaml_files(dirpath, repospecs):
