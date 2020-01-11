@@ -23,7 +23,7 @@ def system_group():
 
 
 @scanrepos_group.command(name="scan")
-@click.argument('dirpath')
+@click.argument("dirpath")
 def scanrepos(dirpath):
     manifest_dict = load_manifest_dir(dirpath)
     clone_repo(manifest_dict)
