@@ -19,16 +19,7 @@ setup(
     install_requires=[
                       "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git@master#egg=utilitiespackage&subdirectory=utilitiespackage",
                       "PyGithub",
-                      "coverage",
-                      "pycontracts", 
-                      "pytest", 
-                      "pytest-cov", 
-                      "pytest-mock", 
-                      "pytest-click", 
-                      "pytest-pylint", 
-                      "black", 
-                      "flake8", 
-                      "radon"],
+                    ],
     entry_points="""
         [console_scripts]
         repoaudittool=repoaudittool.__main__:main
