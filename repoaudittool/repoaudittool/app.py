@@ -127,7 +127,8 @@ def scan_for_requiredfiles_detailed(reponame, requiredfiles):
         if os.path.exists(filepath):
             hash = hash_file(filepath)
             assert hash == file["hash"]
-            print("file ", filepath.replace(tempdir + reponame, ""), " looks good -- pass")
+            statements = ["file ", filepath.replace(tempdir + reponame, ""), "pass"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
 
 
 def scan_for_requiredfiles_list(reponame, requiredfiles):
@@ -136,8 +137,8 @@ def scan_for_requiredfiles_list(reponame, requiredfiles):
     for file in requiredfiles:
         filepath = tempdir + reponame + "/" + reponame + "/" + file
         if os.path.exists(filepath):
-            print("file ", filepath.replace(tempdir + reponame, ""), " exists -- pass")
-
+            statements = ["file ", filepath.replace(tempdir + reponame, ""), "pass"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
 
 def scan_for_similarfiles_detailed(reponame, requiredfiles):
     pass
@@ -157,7 +158,8 @@ def scan_for_requireddirs_list(reponame, requiredfiles):
     for dir in requiredfiles:
         dirpath = tempdir + reponame + "/" + reponame + "/" + dir
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
-            print("dir ", dirpath.replace(tempdir + reponame, ""), " exists -- pass")
+            statements = ["dir", dirpath.replace(tempdir + reponame, ""), "pass"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
 
 
 def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
@@ -170,7 +172,8 @@ def scan_for_forbiddenfiles_list(reponame, requiredfiles):
     for file in requiredfiles:
         filepath = tempdir + reponame + "/" + reponame + "/" + file
         if not os.path.exists(filepath):
-            print("file ", filepath.replace(tempdir + reponame, ""), " does not exists -- pass")
+            statements = ["file", filepath.replace(tempdir + reponame, ""), "pass"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
 
 
 def scan_for_requiredbranches_detailed(reponame, requiredfiles):
@@ -183,6 +186,8 @@ def scan_for_requiredbranches_list(reponame, requiredbranches):
     for branch in requiredbranches:
         branches = str(bash(f"cd {tempdir}{reponame}/{reponame}; git branch -a"))
         if branch in branches:
-            print("branch ", branch, " does exists -- pass")
+            statements = ["branch", branch, "pass"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
         else:
-            print("branch ", branch, " does not exists -- fail")
+            statements = ["branch", branch, "fail"]
+            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
