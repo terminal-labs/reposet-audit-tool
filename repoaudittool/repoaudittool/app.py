@@ -96,11 +96,14 @@ def get_size(start_path):
     for dirpath, dirnames, filenames in os.walk(start_path):
         for f in filenames:
             fp = os.path.join(dirpath, f)
-            # skip if it is symbolic link
             if not os.path.islink(fp):
                 total_size += os.path.getsize(fp)
 
     return total_size
+
+
+def printer(statements):
+    print(f"{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}")
 
 
 def audit_repos(manifest_dict):
@@ -128,7 +131,7 @@ def scan_for_requiredfiles_detailed(reponame, requiredfiles):
             hash = hash_file(filepath)
             assert hash == file["hash"]
             statements = ["file ", filepath.replace(tempdir + reponame, ""), "pass"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
+            printer(statements)
 
 
 def scan_for_requiredfiles_list(reponame, requiredfiles):
@@ -138,7 +141,8 @@ def scan_for_requiredfiles_list(reponame, requiredfiles):
         filepath = tempdir + reponame + "/" + reponame + "/" + file
         if os.path.exists(filepath):
             statements = ["file ", filepath.replace(tempdir + reponame, ""), "pass"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
+            printer(statements)
+
 
 def scan_for_similarfiles_detailed(reponame, requiredfiles):
     pass
@@ -159,7 +163,7 @@ def scan_for_requireddirs_list(reponame, requiredfiles):
         dirpath = tempdir + reponame + "/" + reponame + "/" + dir
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             statements = ["dir", dirpath.replace(tempdir + reponame, ""), "pass"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
+            printer(statements)
 
 
 def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
@@ -173,7 +177,7 @@ def scan_for_forbiddenfiles_list(reponame, requiredfiles):
         filepath = tempdir + reponame + "/" + reponame + "/" + file
         if not os.path.exists(filepath):
             statements = ["file", filepath.replace(tempdir + reponame, ""), "pass"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
+            printer(statements)
 
 
 def scan_for_requiredbranches_detailed(reponame, requiredfiles):
@@ -187,7 +191,6 @@ def scan_for_requiredbranches_list(reponame, requiredbranches):
         branches = str(bash(f"cd {tempdir}{reponame}/{reponame}; git branch -a"))
         if branch in branches:
             statements = ["branch", branch, "pass"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
         else:
             statements = ["branch", branch, "fail"]
-            print(f'{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}')
+        printer(statements)
