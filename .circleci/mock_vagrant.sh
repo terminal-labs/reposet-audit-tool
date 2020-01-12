@@ -1,3 +1,4 @@
+mkdir -p /home/circleci
 chmod 777 -R /home/circleci
 
 useradd -m vagrant
