@@ -18,7 +18,6 @@ setup(
     include_package_data=True,
     install_requires=[
         "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git@master#egg=utilitiespackage&subdirectory=utilitiespackage",
-        "PyGithub",
     ],
     entry_points="""
         [console_scripts]
