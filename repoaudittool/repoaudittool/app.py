@@ -103,11 +103,13 @@ def get_size(start_path):
 
 
 def printer(statements):
+    statements[1] = (statements[1][:40] + '..') if len(statements[1]) > 40 else statements[1]
     print(f"{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}")
 
 
 def audit_repos(manifest_dict):
     for repo in manifest_dict["reponames"]:
+        print("##########")
         print("##########")
         print("scanning", repo)
         print("repo size is:", floating_decimals(get_size(tempdir + repo + "/" + repo) / 1024 / 1024, 2), "mb")
@@ -163,8 +165,9 @@ def scan_for_requireddirs_list(reponame, requiredfiles):
         dirpath = tempdir + reponame + "/" + reponame + "/" + dir
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             statements = ["dir", dirpath.replace(tempdir + reponame, ""), "pass"]
-            printer(statements)
-
+        else:
+            statements = ["dir", dirpath.replace(tempdir + reponame, ""), "failed"]
+        printer(statements)
 
 def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
     pass
