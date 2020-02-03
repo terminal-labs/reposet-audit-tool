@@ -17,6 +17,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     install_requires=[
+        "setuptools",
         "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git@master#egg=utilitiespackage&subdirectory=utilitiespackage",
     ],
     entry_points="""
