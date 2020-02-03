@@ -50,6 +50,40 @@ def clone_repo(manifest_dict):
         bash(f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
 
 
+def clone_repo_for_syncing(manifest_list):
+    dir_create(tempdir)
+    dir_create(tempdir + "sync")
+    for sync_set_ele in manifest_list:
+        bash(f"cd {tempdir}/sync; git clone {sync_set_ele['input']}")
+        bash(f"cd {tempdir}/sync; git clone {sync_set_ele['output']}")
+
+
+def sync(manifest_list):
+    for sync_set_ele in manifest_list:
+        inputname = sync_set_ele['input'].split('/')[-1].replace(".git","")
+        bash(f"cd {tempdir}/sync/{inputname}; rm -rf .git")
+        for root, dirs, files in os.walk(f"{tempdir}/sync/{inputname}"):
+            for file in files:
+                filepath = os.path.join(root, file)
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    text = f.read()
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    f.write(text.replace('pythonsampleproject', '{{cookiecutter.project_slug}}'))
+
+        dirs_to_rename = []
+        for root, dirs, files in os.walk(f"{tempdir}sync/{inputname}"):
+            for dir in dirs:
+                if dir == "pythonsampleproject":
+                    dirs_to_rename.append(os.path.join(root, dir))
+        dirs_to_rename = sorted(dirs_to_rename, key=len)
+        dirs_to_rename.reverse()
+        for dir in dirs_to_rename:
+            p = Path(dir)
+            os.rename(dir, os.path.join(p.parent, '{{cookiecutter.project_slug}}'))
+
+
+
+
 def load_yaml_files(dirpath, repospecs):
     specs = []
     for repospec in repospecs:
@@ -84,6 +118,24 @@ def load_manifest_dir(dirpath):
                 i = i + 1
 
         return manifest_dict
+
+
+def load_sync_dir(dirpath):
+    filename = "" "sync.txt"
+    manifest_list = []
+    if os.path.isdir(dirpath):
+        files = os.listdir(dirpath)
+        if filename in files:
+            f = open(dirpath + "/" + filename, "r")
+            lines = f.readlines()
+            for line in lines:
+                sync_set = {
+                    "input": line.split(" ")[0],
+                    "output": line.split(" ")[1],
+                    "name": line.split(" ")[2],
+                }
+                manifest_list.append(sync_set)
+        return manifest_list
 
 
 def floating_decimals(f_val, dec):
