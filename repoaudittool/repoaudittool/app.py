@@ -43,11 +43,55 @@ def system_check():
     assert sys.version_info >= MINIMUM_PYTHON_VERSION
 
 
+def _get_replacements(line):
+    replacements = []
+    i = len(line.split(" "))
+    while i > 2:
+        replacementpair = line.split(" ")[i - 1].strip()
+        replacements.append(
+            {
+                "find": replacementpair.split(":")[0],
+                "replace": replacementpair.split(":")[1],
+            }
+        )
+        i = i - 1
+    return replacements
+
+
+def _recursive_string_replace(dir):
+    for root, dirs, files in os.walk(dir):
+        for file in files:
+            filepath = os.path.join(root, file)
+            with open(filepath, "r", encoding="utf-8") as f:
+                text = f.read()
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(
+                    text.replace(
+                        "pythonsampleproject", "{{cookiecutter.project_slug}}"
+                    )
+                )
+
+
+def _recursive_dir_rename(dir):
+    dirs_to_rename = []
+    for root, dirs, files in os.walk(dir):
+        for dir in dirs:
+            if dir == "pythonsampleproject":
+                dirs_to_rename.append(os.path.join(root, dir))
+    dirs_to_rename = sorted(dirs_to_rename, key=len)
+    dirs_to_rename.reverse()
+    for dir in dirs_to_rename:
+        p = Path(dir)
+        os.rename(dir, os.path.join(p.parent, "{{cookiecutter.project_slug}}"))
+
+
 def clone_repo(manifest_dict):
     dir_create(tempdir)
     for file in manifest_dict["reponames"]:
         dir_create(tempdir + file)
-        bash(f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
+        bash(
+            f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git"
+        )
 
 
 def clone_repo_for_syncing(manifest_list):
@@ -60,34 +104,18 @@ def clone_repo_for_syncing(manifest_list):
 
 def sync(manifest_list):
     for sync_set_ele in manifest_list:
-        inputname = sync_set_ele['input'].split('/')[-1].replace(".git","")
+        inputname = sync_set_ele["input"].split("/")[-1].replace(".git", "")
         bash(f"cd {tempdir}/sync/{inputname}; rm -rf .git")
-        for root, dirs, files in os.walk(f"{tempdir}/sync/{inputname}"):
-            for file in files:
-                filepath = os.path.join(root, file)
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    text = f.read()
-                with open(filepath, 'w', encoding='utf-8') as f:
-                    f.write(text.replace('pythonsampleproject', '{{cookiecutter.project_slug}}'))
-
-        dirs_to_rename = []
-        for root, dirs, files in os.walk(f"{tempdir}sync/{inputname}"):
-            for dir in dirs:
-                if dir == "pythonsampleproject":
-                    dirs_to_rename.append(os.path.join(root, dir))
-        dirs_to_rename = sorted(dirs_to_rename, key=len)
-        dirs_to_rename.reverse()
-        for dir in dirs_to_rename:
-            p = Path(dir)
-            os.rename(dir, os.path.join(p.parent, '{{cookiecutter.project_slug}}'))
-
-
+        _recursive_string_replace(f"{tempdir}/sync/{inputname}")
+        _recursive_dir_rename(f"{tempdir}sync/{inputname}")
 
 
 def load_yaml_files(dirpath, repospecs):
     specs = []
     for repospec in repospecs:
-        specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.Loader))
+        specs.append(
+            yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.Loader)
+        )
     return specs
 
 
@@ -121,7 +149,7 @@ def load_manifest_dir(dirpath):
 
 
 def load_sync_dir(dirpath):
-    filename = "" "sync.txt"
+    filename = "sync.txt"
     manifest_list = []
     if os.path.isdir(dirpath):
         files = os.listdir(dirpath)
@@ -129,6 +157,7 @@ def load_sync_dir(dirpath):
             f = open(dirpath + "/" + filename, "r")
             lines = f.readlines()
             for line in lines:
+                _get_replacements(line)
                 sync_set = {
                     "input": line.split(" ")[0],
                     "output": line.split(" ")[1],
@@ -155,7 +184,9 @@ def get_size(start_path):
 
 
 def printer(statements):
-    statements[1] = (statements[1][:40] + '..') if len(statements[1]) > 40 else statements[1]
+    statements[1] = (
+        (statements[1][:40] + "..") if len(statements[1]) > 40 else statements[1]
+    )
     print(f"{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}")
 
 
@@ -164,12 +195,26 @@ def audit_repos(manifest_dict):
         print("##########")
         print("##########")
         print("scanning", repo)
-        print("repo size is:", floating_decimals(get_size(tempdir + repo + "/" + repo) / 1024 / 1024, 2), "mb")
-        scan_for_requiredfiles_detailed(repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_detailed"])
-        scan_for_requiredfiles_list(repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_list"])
-        scan_for_forbiddenfiles_list(repo, manifest_dict["specs"][repo]["spec"]["forbiddenfiles_list"])
-        scan_for_requireddirs_list(repo, manifest_dict["specs"][repo]["spec"]["requireddirs_list"])
-        scan_for_requiredbranches_list(repo, manifest_dict["specs"][repo]["spec"]["requiredbranches_list"])
+        print(
+            "repo size is:",
+            floating_decimals(get_size(tempdir + repo + "/" + repo) / 1024 / 1024, 2),
+            "mb",
+        )
+        scan_for_requiredfiles_detailed(
+            repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_detailed"]
+        )
+        scan_for_requiredfiles_list(
+            repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_list"]
+        )
+        scan_for_forbiddenfiles_list(
+            repo, manifest_dict["specs"][repo]["spec"]["forbiddenfiles_list"]
+        )
+        scan_for_requireddirs_list(
+            repo, manifest_dict["specs"][repo]["spec"]["requireddirs_list"]
+        )
+        scan_for_requiredbranches_list(
+            repo, manifest_dict["specs"][repo]["spec"]["requiredbranches_list"]
+        )
 
 
 def scan_for_repometadata():
@@ -221,6 +266,7 @@ def scan_for_requireddirs_list(reponame, requiredfiles):
         else:
             statements = ["dir", dirpath.replace(tempdir + reponame, ""), "failed"]
         printer(statements)
+
 
 def scan_for_forbiddenfiles_detailed(reponame, requiredfiles):
     pass

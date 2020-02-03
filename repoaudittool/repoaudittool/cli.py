@@ -4,7 +4,15 @@ import pytest
 import requests
 
 from repoaudittool.settings import *
-from repoaudittool.app import load_manifest_dir, load_sync_dir, clone_repo, clone_repo_for_syncing, sync, audit_repos, dir_delete
+from repoaudittool.app import (
+    load_manifest_dir,
+    load_sync_dir,
+    clone_repo,
+    clone_repo_for_syncing,
+    sync,
+    audit_repos,
+    dir_delete,
+)
 
 
 @click.group()
@@ -57,7 +65,15 @@ def selftest_command():
 @system_group.command(name="selfcoverage")
 def selfcoverage_command():
     os.chdir(APPDIR)
-    pytest.main([f"--cov-config={COVERAGERC_PATH}", "--cov=repoaudittool", "--cov-report", "term-missing", APPDIR])
+    pytest.main(
+        [
+            f"--cov-config={COVERAGERC_PATH}",
+            "--cov=repoaudittool",
+            "--cov-report",
+            "term-missing",
+            APPDIR,
+        ]
+    )
 
 
 cli.add_command(scanrepos_group)
