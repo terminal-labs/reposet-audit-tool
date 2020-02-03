@@ -129,6 +129,7 @@ def scan_for_requiredfiles_detailed(reponame, requiredfiles):
     print("scanning requiredfiles_detailed")
     for file in requiredfiles:
         filepath = tempdir + reponame + "/" + reponame + "/" + file["name"]
+        print(filepath)
         if os.path.exists(filepath):
             hash = hash_file(filepath)
             assert hash == file["hash"]

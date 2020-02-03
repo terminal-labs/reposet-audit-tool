@@ -28,7 +28,7 @@ def scanrepos(dirpath):
     manifest_dict = load_manifest_dir(dirpath)
     clone_repo(manifest_dict)
     audit_repos(manifest_dict)
-    dir_delete("/tmp/rat/")
+    #dir_delete("/tmp/rat/")
 
 
 @system_group.command(name="version")
