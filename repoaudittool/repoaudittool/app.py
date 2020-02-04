@@ -42,6 +42,18 @@ def initialize():
 def system_check():
     assert sys.version_info >= MINIMUM_PYTHON_VERSION
 
+def _increment_ticker(filepath):
+    with open(filepath, "r", encoding="utf-8") as f:
+        text = f.read()
+        text = text.strip()
+        ticker = int(text)
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(
+            text.replace(
+                str(ticker), str(ticker + 1)
+            )
+        )
+
 
 def _get_replacements(line):
     replacements = []
@@ -62,14 +74,17 @@ def _recursive_string_replace(dir):
     for root, dirs, files in os.walk(dir):
         for file in files:
             filepath = os.path.join(root, file)
-            with open(filepath, "r", encoding="utf-8") as f:
-                text = f.read()
-            with open(filepath, "w", encoding="utf-8") as f:
-                f.write(
-                    text.replace(
-                        "pythonsampleproject", "{{cookiecutter.project_slug}}"
+            name, ext = os.path.splitext(file)
+            print(ext)
+            if ext not in [".png",".jpg"]:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    text = f.read()
+                with open(filepath, "w", encoding="utf-8") as f:
+                    f.write(
+                        text.replace(
+                            "pythonsampleproject", "{{cookiecutter.project_slug}}"
+                        )
                     )
-                )
 
 
 def _recursive_dir_rename(dir):
@@ -105,9 +120,17 @@ def clone_repo_for_syncing(manifest_list):
 def sync(manifest_list):
     for sync_set_ele in manifest_list:
         inputname = sync_set_ele["input"].split("/")[-1].replace(".git", "")
+        outputname = sync_set_ele["output"].split("/")[-1].replace(".git", "")
+        target = "{{cookiecutter.project_name}}"
+        bash(f"cd {tempdir}/sync/{outputname}; rm -rf {target}")
         bash(f"cd {tempdir}/sync/{inputname}; rm -rf .git")
         _recursive_string_replace(f"{tempdir}/sync/{inputname}")
         _recursive_dir_rename(f"{tempdir}sync/{inputname}")
+        _increment_ticker(f"{tempdir}/sync/{inputname}/ticker.txt")
+        bash(f"cd {tempdir}/sync; cp -r {tempdir}sync/{inputname} {tempdir}/sync/{outputname}/{target}")
+        bash(f"cd {tempdir}/sync/{outputname}; git add * -f")
+        bash(f"cd {tempdir}/sync/{outputname}; git commit -m 'auto cookiecutter sync'")
+        bash(f"cd {tempdir}/sync/{outputname}; git push")
 
 
 def load_yaml_files(dirpath, repospecs):
