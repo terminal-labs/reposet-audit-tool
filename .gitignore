@@ -16,9 +16,11 @@ extra
 *.pyc
 *.pex
 
+repos
 maintenance
 run
 tmp
+.inflation
 .tmp
 manifest
 activate.sh
@@ -30,7 +32,8 @@ activate.sh
 *workingdirs
 *secrets
 *dist
-
+inflation-master
+Vagrantfile
 *.terraform
 *terraform.tfstate
 *terraform.tfstate.backup
