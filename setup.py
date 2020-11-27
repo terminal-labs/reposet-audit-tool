@@ -18,7 +18,8 @@ setup(
     include_package_data=True,
     install_requires=[
         "setuptools",
-        "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git@master#egg=utilitiespackage&subdirectory=utilitiespackage",
+        "utilities-package-pinion@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package-pinion.git",
+        "utilities-package@git+https://gitlab.com/terminallabs/utilitiespackage/utilities-package.git",
     ],
     entry_points="""
         [console_scripts]
