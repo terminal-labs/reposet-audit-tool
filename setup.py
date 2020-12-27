@@ -1,19 +1,20 @@
 import sys
 from setuptools import setup, find_packages
 
-from repoaudittool.settings import *
-
 assert sys.version_info >= (3, 6, 0)
 
+package_link = '.tmp/symlink'
+
 setup(
-    name="repo-audit-tool",
-    version=VERSION,
+    name="repoaudittool",
+    version="0.0.1",
     description="repo audit tool",
     url="https://github.com/terminal-labs/repo-audit-tool",
     author="Terminal Labs",
     author_email="solutions@terminallabs.com",
     license="mit",
-    packages=find_packages(),
+    package_dir={'': package_link},
+    packages=find_packages(where=package_link),
     zip_safe=False,
     include_package_data=True,
     install_requires=[
