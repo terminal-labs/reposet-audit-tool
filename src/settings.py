@@ -1,3 +1,4 @@
+import pathlib
 import configparser
 
 from repoaudittool.derived_settings import APPDIR, SETUPFILEDIR, TESTDIR, MEMTEMPDIR, SITEPACKAGESPATH
@@ -5,7 +6,7 @@ from repoaudittool.resolved_settings import get_env_variable, resolve_payload_pa
 
 
 config = configparser.ConfigParser()
-config.read('setup.cfg')
+config.read("/Users/mike/Desktop/bash-environment-templates/samples/reposet/.tmp/repos/reposet-audit-tool/setup.cfg")
 
 VERSION = config["metadata"]["version"]
 NAME = config["metadata"]["name"]

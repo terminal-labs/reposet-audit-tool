@@ -42,18 +42,6 @@ def initialize():
 def system_check():
     assert sys.version_info >= MINIMUM_PYTHON_VERSION
 
-def _increment_ticker(filepath):
-    with open(filepath, "r", encoding="utf-8") as f:
-        text = f.read()
-        text = text.strip()
-        ticker = int(text)
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(
-            text.replace(
-                str(ticker), str(ticker + 1)
-            )
-        )
-
 
 def _get_replacements(line):
     replacements = []
@@ -68,36 +56,6 @@ def _get_replacements(line):
         )
         i = i - 1
     return replacements
-
-
-def _recursive_string_replace(dir):
-    for root, dirs, files in os.walk(dir):
-        for file in files:
-            filepath = os.path.join(root, file)
-            name, ext = os.path.splitext(file)
-            print(ext)
-            if ext not in [".png",".jpg"]:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    text = f.read()
-                with open(filepath, "w", encoding="utf-8") as f:
-                    f.write(
-                        text.replace(
-                            "pythonsampleproject", "{{cookiecutter.project_slug}}"
-                        )
-                    )
-
-
-def _recursive_dir_rename(dir):
-    dirs_to_rename = []
-    for root, dirs, files in os.walk(dir):
-        for dir in dirs:
-            if dir == "pythonsampleproject":
-                dirs_to_rename.append(os.path.join(root, dir))
-    dirs_to_rename = sorted(dirs_to_rename, key=len)
-    dirs_to_rename.reverse()
-    for dir in dirs_to_rename:
-        p = Path(dir)
-        os.rename(dir, os.path.join(p.parent, "{{cookiecutter.project_slug}}"))
 
 
 def clone_repo(manifest_dict):
@@ -124,9 +82,6 @@ def sync(manifest_list):
         target = "{{cookiecutter.project_name}}"
         bash(f"cd {tempdir}/sync/{outputname}; rm -rf {target}")
         bash(f"cd {tempdir}/sync/{inputname}; rm -rf .git")
-        _recursive_string_replace(f"{tempdir}/sync/{inputname}")
-        _recursive_dir_rename(f"{tempdir}sync/{inputname}")
-        _increment_ticker(f"{tempdir}/sync/{inputname}/ticker.txt")
         bash(f"cd {tempdir}/sync; cp -r {tempdir}sync/{inputname} {tempdir}/sync/{outputname}/{target}")
         bash(f"cd {tempdir}/sync/{outputname}; git add * -f")
         bash(f"cd {tempdir}/sync/{outputname}; git commit -m 'auto cookiecutter sync'")

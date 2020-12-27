@@ -1,14 +1,14 @@
+import os
 import sys
+import pathlib
 import configparser
+from pathlib import Path
 from setuptools import setup, find_packages
 
 assert sys.version_info >= (3, 6, 0)
-
-config = configparser.ConfigParser()
-config.read("setup.cfg")
-
-version = config["metadata"]["version"]
-name = config["metadata"]["name"]
+_path = str(pathlib.Path(__file__).parent.absolute())
+_src = "/src"
+_config = "/setup.cfg"
 
 setup_author="Terminal Labs",
 setup_author_email="solutions@terminallabs.com",
@@ -16,11 +16,27 @@ setup_license="see LICENSE file",
 setup_url = "https://github.com/terminal-labs/repo-audit-tool"
 package_link = ".tmp/symlink"
 
+config = configparser.ConfigParser()
+config.read(_path + _config)
+version = config["metadata"]["version"]
+name = config["metadata"]["name"]
+
 repo_name = name
 package_name = repo_name.replace("-","")
 setup_stub_name = package_name
 setup_full_name = repo_name
 setup_description = setup_full_name.replace("-"," ")
+
+def setup_links():
+    _link = package_link + "/"
+    Path(_path + _link).mkdir(parents=True, exist_ok=True)
+    if not os.path.islink(_path + _link + package_name):
+        os.symlink(
+            _path + _src,
+            _path + _link + package_name
+        )
+
+setup_links()
 
 pins = []
 
@@ -31,7 +47,7 @@ reqs = [
 ]
 
 setup(
-    name=setup_full_name,
+    name=package_name,
     version=version,
     description=setup_description,
     url=setup_url,
@@ -43,8 +59,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     install_requires=pins + reqs,
-    entry_points=f"""
+    entry_points="""
         [console_scripts]
-        repoaudittool=repoaudittool.__main__:main
-    """,
+    """ + f"{setup_stub_name}={setup_stub_name}.__main__:main",
 )
