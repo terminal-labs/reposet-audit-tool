@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 assert sys.version_info >= (3, 6, 0)
 _path = str(pathlib.Path(__file__).parent.absolute())
-_src = "/src"
+_src = "src"
 _config = "/setup.cfg"
 
 setup_author = ("Terminal Labs",)
@@ -32,7 +32,7 @@ def setup_links():
     _link = package_link + "/"
     Path(_path + "/" + _link).mkdir(parents=True, exist_ok=True)
     if not os.path.islink(_path + "/" + _link + package_name):
-        os.symlink(os.path.join(_path, _src), _path + "/" + _link + package_name)
+        os.symlink(os.path.join(_path, _src), _path + "/" + _link + "/" + package_name)
 
 
 setup_links()
