@@ -4,16 +4,20 @@ import click
 import pytest
 import requests
 
-with open(os.path.dirname(__file__) + "/loader.py") as f:
+with open(os.path.dirname(__file__) + "/framework/loader.py") as f:
     code = compile(f.read(), "loader.py", "exec")
     exec(code)
 
 _pgk_name = _get_pgk_name()
-mod = f"{_pgk_name}.settings"
+mod = f"{_pgk_name}.framework.layout"
+showlayout = _import_fun(mod, "showlayout")
+
+_pgk_name = _get_pgk_name()
+mod = f"{_pgk_name}.framework.settings"
 VERSION = _import_fun(mod, "VERSION")
 COVERAGERC_PATH = _import_fun(mod, "COVERAGERC_PATH")
 
-mod = f"{_pgk_name}.derived_settings"
+mod = f"{_pgk_name}.framework.derived_settings"
 APPDIR = _import_fun(mod, "APPDIR")
 TESTDIR = _import_fun(mod, "TESTDIR")
 
@@ -61,6 +65,11 @@ def syncrepos(dirpath):
     manifest_list = load_sync_dir(dirpath)
     clone_repo_for_syncing(manifest_list)
     sync(manifest_list)
+
+
+@system_group.command(name="showlayout")
+def showlayout_command():
+    print(*showlayout().items(), sep='\n')
 
 
 @system_group.command(name="version")

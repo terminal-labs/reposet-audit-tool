@@ -10,13 +10,13 @@ from shutil import copyfile, move, rmtree
 import yaml
 from bash import bash
 
-with open(os.path.dirname(__file__) + "/loader.py") as f:
+with open(os.path.dirname(__file__) + "/framework/loader.py") as f:
     code = compile(f.read(), "loader.py", "exec")
     exec(code)
 
 _pgk_name = _get_pgk_name()
-MINIMUM_PYTHON_VERSION = _import_fun(f"{_pgk_name}.settings", "MINIMUM_PYTHON_VERSION")
-DIRS = _import_fun(f"{_pgk_name}.settings", "DIRS")
+MINIMUM_PYTHON_VERSION = _import_fun(f"{_pgk_name}.framework.settings", "MINIMUM_PYTHON_VERSION")
+DIRS = _import_fun(f"{_pgk_name}.framework.settings", "DIRS")
 
 tempdir = "/tmp/rat/"
 

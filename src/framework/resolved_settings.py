@@ -5,7 +5,7 @@ with open(os.path.dirname(__file__) + "/loader.py") as f:
     exec(code)
 
 _pgk_name = _get_pgk_name()
-SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.derived_settings", "SITEPACKAGESPATH")
+SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.framework.derived_settings", "SITEPACKAGESPATH")
 
 _egg = ".egg-link"
 _paylaod = "/payload"

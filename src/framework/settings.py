@@ -6,13 +6,13 @@ with open(os.path.dirname(__file__) + "/loader.py") as f:
     exec(code)
 
 _pgk_name = _get_pgk_name()
-APPDIR = _import_fun(f"{_pgk_name}.derived_settings", "APPDIR")
-SETUPFILEDIR = _import_fun(f"{_pgk_name}.derived_settings", "SETUPFILEDIR")
-MEMTEMPDIR = _import_fun(f"{_pgk_name}.derived_settings", "MEMTEMPDIR")
-SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.derived_settings", "SITEPACKAGESPATH")
+APPDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "APPDIR")
+SETUPFILEDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "SETUPFILEDIR")
+MEMTEMPDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "MEMTEMPDIR")
+SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.framework.derived_settings", "SITEPACKAGESPATH")
 
-get_env_variable = _import_fun(f"{_pgk_name}.resolved_settings", "get_env_variable")
-resolve_payload_path = _import_fun(f"{_pgk_name}.resolved_settings", "resolve_payload_path")
+get_env_variable = _import_fun(f"{_pgk_name}.framework.resolved_settings", "get_env_variable")
+resolve_payload_path = _import_fun(f"{_pgk_name}.framework.resolved_settings", "resolve_payload_path")
 
 config = configparser.ConfigParser()
 config.read("/Users/mike/Desktop/bash-environment-templates/samples/reposet/.tmp/repos/reposet-audit-tool/setup.cfg")
