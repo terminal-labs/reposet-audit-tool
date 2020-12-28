@@ -1,9 +1,18 @@
-import pathlib
+import os
 import configparser
 
-from repoaudittool.derived_settings import APPDIR, SETUPFILEDIR, TESTDIR, MEMTEMPDIR, SITEPACKAGESPATH
-from repoaudittool.resolved_settings import get_env_variable, resolve_payload_path
+with open(os.path.dirname(__file__) + "/loader.py") as f:
+    code = compile(f.read(), "loader.py", "exec")
+    exec(code)
 
+_pgk_name = _get_pgk_name()
+APPDIR = _import_fun(f"{_pgk_name}.derived_settings", "APPDIR")
+SETUPFILEDIR = _import_fun(f"{_pgk_name}.derived_settings", "SETUPFILEDIR")
+MEMTEMPDIR = _import_fun(f"{_pgk_name}.derived_settings", "MEMTEMPDIR")
+SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.derived_settings", "SITEPACKAGESPATH")
+
+get_env_variable = _import_fun(f"{_pgk_name}.resolved_settings", "get_env_variable")
+resolve_payload_path = _import_fun(f"{_pgk_name}.resolved_settings", "resolve_payload_path")
 
 config = configparser.ConfigParser()
 config.read("/Users/mike/Desktop/bash-environment-templates/samples/reposet/.tmp/repos/reposet-audit-tool/setup.cfg")

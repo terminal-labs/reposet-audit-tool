@@ -1,10 +1,16 @@
 import os
 
-from repoaudittool.derived_settings import SITEPACKAGESPATH
+with open(os.path.dirname(__file__) + "/loader.py") as f:
+    code = compile(f.read(), "loader.py", "exec")
+    exec(code)
+
+_pgk_name = _get_pgk_name()
+SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.derived_settings", "SITEPACKAGESPATH")
 
 _egg = ".egg-link"
 _paylaod = "/payload"
 _conf = "/conf.cfg"
+
 
 def get_env_variable(name):
     assert isinstance(name, str) is True

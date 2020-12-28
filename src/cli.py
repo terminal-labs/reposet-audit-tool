@@ -1,18 +1,30 @@
 import os
 import click
+
 import pytest
 import requests
 
-from repoaudittool.settings import *
-from repoaudittool.app import (
-    load_manifest_dir,
-    load_sync_dir,
-    clone_repo,
-    clone_repo_for_syncing,
-    sync,
-    audit_repos,
-    dir_delete,
-)
+with open(os.path.dirname(__file__) + "/loader.py") as f:
+    code = compile(f.read(), "loader.py", "exec")
+    exec(code)
+
+_pgk_name = _get_pgk_name()
+mod = f"{_pgk_name}.settings"
+VERSION = _import_fun(mod, "VERSION")
+COVERAGERC_PATH = _import_fun(mod, "COVERAGERC_PATH")
+
+mod = f"{_pgk_name}.derived_settings"
+APPDIR = _import_fun(mod, "APPDIR")
+TESTDIR = _import_fun(mod, "TESTDIR")
+
+mod = f"{_pgk_name}.app"
+load_manifest_dir = _import_fun(mod, "load_manifest_dir")
+load_sync_dir = _import_fun(mod, "load_sync_dir")
+clone_repo = _import_fun(mod, "clone_repo")
+clone_repo_for_syncing = _import_fun(mod, "clone_repo_for_syncing")
+sync = _import_fun(mod, "sync")
+audit_repos = _import_fun(mod, "audit_repos")
+dir_delete = _import_fun(mod, "dir_delete")
 
 
 @click.group()
@@ -68,7 +80,7 @@ def selfcoverage_command():
     pytest.main(
         [
             f"--cov-config={COVERAGERC_PATH}",
-            "--cov=repoaudittool",
+            f"--cov={_pgk_name}",
             "--cov-report",
             "term-missing",
             APPDIR,

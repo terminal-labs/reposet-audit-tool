@@ -10,9 +10,9 @@ _path = str(pathlib.Path(__file__).parent.absolute())
 _src = "/src"
 _config = "/setup.cfg"
 
-setup_author="Terminal Labs",
-setup_author_email="solutions@terminallabs.com",
-setup_license="see LICENSE file",
+setup_author = ("Terminal Labs",)
+setup_author_email = ("solutions@terminallabs.com",)
+setup_license = ("see LICENSE file",)
 setup_url = "https://github.com/terminal-labs/repo-audit-tool"
 package_link = ".tmp/symlink"
 
@@ -22,19 +22,18 @@ version = config["metadata"]["version"]
 name = config["metadata"]["name"]
 
 repo_name = name
-package_name = repo_name.replace("-","")
+package_name = repo_name.replace("-", "")
 setup_stub_name = package_name
 setup_full_name = repo_name
-setup_description = setup_full_name.replace("-"," ")
+setup_description = setup_full_name.replace("-", " ")
+
 
 def setup_links():
     _link = package_link + "/"
-    Path(_path + _link).mkdir(parents=True, exist_ok=True)
-    if not os.path.islink(_path + _link + package_name):
-        os.symlink(
-            _path + _src,
-            _path + _link + package_name
-        )
+    Path(_path + "/" + _link).mkdir(parents=True, exist_ok=True)
+    if not os.path.islink(_path + "/" + _link + package_name):
+        os.symlink(os.path.join(_path, _src), _path + "/" + _link + package_name)
+
 
 setup_links()
 
@@ -54,12 +53,13 @@ setup(
     author=setup_author,
     author_email=setup_author_email,
     license=setup_license,
-    package_dir={'': package_link},
+    package_dir={"": package_link},
     packages=find_packages(where=package_link),
     zip_safe=False,
     include_package_data=True,
     install_requires=pins + reqs,
     entry_points="""
         [console_scripts]
-    """ + f"{setup_stub_name}={setup_stub_name}.__main__:main",
+    """
+    + f"{setup_stub_name}={setup_stub_name}.__main__:main",
 )

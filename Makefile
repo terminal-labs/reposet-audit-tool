@@ -1,4 +1,4 @@
-APPNAME=repoaudittool
+APPNAME=reposetaudittool
 PYTHONVERSION=3.6.9
 
 help:

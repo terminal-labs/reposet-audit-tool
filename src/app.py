@@ -10,7 +10,13 @@ from shutil import copyfile, move, rmtree
 import yaml
 from bash import bash
 
-from repoaudittool.settings import *
+with open(os.path.dirname(__file__) + "/loader.py") as f:
+    code = compile(f.read(), "loader.py", "exec")
+    exec(code)
+
+_pgk_name = _get_pgk_name()
+MINIMUM_PYTHON_VERSION = _import_fun(f"{_pgk_name}.settings", "MINIMUM_PYTHON_VERSION")
+DIRS = _import_fun(f"{_pgk_name}.settings", "DIRS")
 
 tempdir = "/tmp/rat/"
 
@@ -62,9 +68,7 @@ def clone_repo(manifest_dict):
     dir_create(tempdir)
     for file in manifest_dict["reponames"]:
         dir_create(tempdir + file)
-        bash(
-            f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git"
-        )
+        bash(f"cd {tempdir}{file}; git clone {manifest_dict['specs'][file]['spec']['repometadata']['urlbase']}/{file}.git")
 
 
 def clone_repo_for_syncing(manifest_list):
@@ -91,9 +95,7 @@ def sync(manifest_list):
 def load_yaml_files(dirpath, repospecs):
     specs = []
     for repospec in repospecs:
-        specs.append(
-            yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.Loader)
-        )
+        specs.append(yaml.load(open(dirpath + "/specs/" + repospec), Loader=yaml.Loader))
     return specs
 
 
@@ -162,9 +164,7 @@ def get_size(start_path):
 
 
 def printer(statements):
-    statements[1] = (
-        (statements[1][:40] + "..") if len(statements[1]) > 40 else statements[1]
-    )
+    statements[1] = (statements[1][:40] + "..") if len(statements[1]) > 40 else statements[1]
     print(f"{statements[0]:<20}  {statements[1]:<60}  {statements[2]:>20}")
 
 
@@ -178,21 +178,11 @@ def audit_repos(manifest_dict):
             floating_decimals(get_size(tempdir + repo + "/" + repo) / 1024 / 1024, 2),
             "mb",
         )
-        scan_for_requiredfiles_detailed(
-            repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_detailed"]
-        )
-        scan_for_requiredfiles_list(
-            repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_list"]
-        )
-        scan_for_forbiddenfiles_list(
-            repo, manifest_dict["specs"][repo]["spec"]["forbiddenfiles_list"]
-        )
-        scan_for_requireddirs_list(
-            repo, manifest_dict["specs"][repo]["spec"]["requireddirs_list"]
-        )
-        scan_for_requiredbranches_list(
-            repo, manifest_dict["specs"][repo]["spec"]["requiredbranches_list"]
-        )
+        scan_for_requiredfiles_detailed(repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_detailed"])
+        scan_for_requiredfiles_list(repo, manifest_dict["specs"][repo]["spec"]["requiredfiles_list"])
+        scan_for_forbiddenfiles_list(repo, manifest_dict["specs"][repo]["spec"]["forbiddenfiles_list"])
+        scan_for_requireddirs_list(repo, manifest_dict["specs"][repo]["spec"]["requireddirs_list"])
+        scan_for_requiredbranches_list(repo, manifest_dict["specs"][repo]["spec"]["requiredbranches_list"])
 
 
 def scan_for_repometadata():
