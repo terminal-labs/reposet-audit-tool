@@ -5,21 +5,30 @@ with open(os.path.dirname(__file__) + "/loader.py") as f:
     code = compile(f.read(), "loader.py", "exec")
     exec(code)
 
-_pgk_name = _get_pgk_name()
-APPDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "APPDIR")
-SETUPFILEDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "SETUPFILEDIR")
-MEMTEMPDIR = _import_fun(f"{_pgk_name}.framework.derived_settings", "MEMTEMPDIR")
-SITEPACKAGESPATH = _import_fun(f"{_pgk_name}.framework.derived_settings", "SITEPACKAGESPATH")
-
-get_env_variable = _import_fun(f"{_pgk_name}.framework.resolved_settings", "get_env_variable")
-resolve_payload_path = _import_fun(f"{_pgk_name}.framework.resolved_settings", "resolve_payload_path")
-
 config = configparser.ConfigParser()
-config.read("/Users/mike/Desktop/bash-environment-templates/samples/reposet/.tmp/repos/reposet-audit-tool/setup.cfg")
+_pgk_name = _get_pgk_name()
+
+mod = f"{_pgk_name}.framework.derived_settings"
+PACKAGENAME = _import_fun(mod, "PACKAGENAME")
+PACKAGEDIR = _import_fun(mod, "PACKAGEDIR")
+FRAMEWORKDIR = _import_fun(mod, "FRAMEWORKDIR")
+SRCDIR = _import_fun(mod, "SRCDIR")
+APPDIR = _import_fun(mod, "APPDIR")
+SETUPFILEDIR = _import_fun(mod, "SETUPFILEDIR")
+TESTDIR = _import_fun(mod, "TESTDIR")
+MEMTEMPDIR = _import_fun(mod, "MEMTEMPDIR")
+SITEPACKAGESPATH = _import_fun(mod, "SITEPACKAGESPATH")
+
+mod = f"{_pgk_name}.framework.resolved_settings"
+get_env_variable = _import_fun(mod, "get_env_variable")
+resolve_payload_path = _import_fun(mod, "resolve_payload_path")
+
+config.read(PACKAGEDIR + "/setup.cfg")
 
 VERSION = config["metadata"]["version"]
 NAME = config["metadata"]["name"]
 
+FRAMEWORK_VERSION = "0.0.1"
 PROJECT_NAME = NAME
 PRINT_VERBOSITY = "high"
 EXCLUDED_DIRS = [".DS_Store"]
@@ -29,18 +38,10 @@ TEXTTABLE_STYLE = ["-", "|", "+", "-"]
 MINIMUM_PYTHON_VERSION = (3, 6, 0)
 COVERAGERC_PATH = f"{APPDIR}/.coveragerc"
 
+# conda path
 # reponame = "code"
-# VERSION = "0.0.1"
-# PRINT_VERBOSITY = "high"
-# EXCLUDED_DIRS = [".DS_Store"]
 # SETUP_NAME = reponame
-# PROJECT_NAME = SETUP_NAME.replace("_", "").replace("-", "")
 # EGG_NAME = SETUP_NAME.replace("_", "-")
-# TEMPDIR = "/tmp"
-# TEXTTABLE_STYLE = ["-", "|", "+", "-"]
-# DIRS = [f"{TEMPDIR}/{SETUP_NAME}workingdirs"]
-# MINIMUM_PYTHON_VERSION = (3, 6, 0)
-# COVERAGERC_PATH = f"{APPDIR}/.coveragerc"
 # PAYLOADPATH = SITEPACKAGESPATH  # noqa: F841
 # server_port = 5000
 # socket_host = "0.0.0.0"
@@ -67,3 +68,27 @@ COVERAGERC_PATH = f"{APPDIR}/.coveragerc"
 #     "POSTGRES_DB": POSTGRES_DB,
 # }
 # tempfile.tempdir = TEMPDIR  # noqa: F821
+
+VARS = {
+    "VERSION": VERSION,
+    "NAME": NAME,
+    "FRAMEWORK_VERSION": FRAMEWORK_VERSION,
+    "PROJECT_NAME": PROJECT_NAME,
+    "PRINT_VERBOSITY": PRINT_VERBOSITY,
+    "EXCLUDED_DIRS": EXCLUDED_DIRS,
+    "TEMPDIR": TEMPDIR,
+    "DIRS": DIRS,
+    "TEXTTABLE_STYLE": TEXTTABLE_STYLE,
+    "MINIMUM_PYTHON_VERSION": MINIMUM_PYTHON_VERSION,
+    "COVERAGERC_PATH": COVERAGERC_PATH,
+    "PACKAGENAME": PACKAGENAME,
+    "PACKAGEDIR": PACKAGEDIR,
+    "FRAMEWORKDIR": FRAMEWORKDIR,
+    "SRCDIR": SRCDIR,
+    "APPDIR": APPDIR,
+    "SETUPFILEDIR": SETUPFILEDIR,
+    "TESTDIR":  TESTDIR,
+    "MEMTEMPDIR": MEMTEMPDIR,
+    "SITEPACKAGESPATH": SITEPACKAGESPATH,
+    "CONFIG": config._sections
+}

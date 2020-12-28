@@ -13,8 +13,9 @@ SRCDIR = os.path.abspath(os.path.join(FRAMEWORKDIR, ".."))
 APPDIR = os.path.abspath(os.path.join(FRAMEWORKDIR, ".."))
 SETUPFILEDIR = os.path.abspath(os.path.join(APPDIR, ".."))
 TESTDIR = os.path.abspath(os.path.join(APPDIR, "tests"))
-MEMTEMPDIR = "/dev/shm"
-SITEPACKAGESPATH = site.getsitepackages()[0]
-
-if os.path.isdir(MEMTEMPDIR):
+if os.path.isdir("/dev/shm"):
+    MEMTEMPDIR = "/dev/shm"
     tempfile.tempdir = MEMTEMPDIR
+else:
+    MEMTEMPDIR = ""
+SITEPACKAGESPATH = site.getsitepackages()[0]
