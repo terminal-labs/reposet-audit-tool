@@ -35,7 +35,7 @@ def _get_pgk_name():
     while i > 0:
         currentpath = _join(currentpath, "..")
         if isfile(currentpath + "/setup.py"):
-            return basename(currentpath).replace("-", "")
+            return basename(currentpath).replace("-", "").replace("interface_","")
             i = -1
         i = i - 1
 
